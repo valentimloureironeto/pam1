@@ -1,63 +1,90 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-final num1Controller = TextEditingController();
-final num2Controller = TextEditingController();
+  final num1Controller = TextEditingController();
+  final num2Controller = TextEditingController();
 
-   HomePage({super.key});
+  HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextField(
-                  controller: num1Controller,
-                  decoration: const InputDecoration(
-                    labelText: "Primeiro numero"
-                  ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextField(
+                controller: num1Controller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Primeiro número",
                 ),
-                const Text(
-                  "+",
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                  ),
-                TextField(
-                  controller: num2Controller,
-                  decoration: const InputDecoration(
-                    labelText: "Segundo Numero"
-                  ),
+              ),
+              
+              TextField(
+                controller: num2Controller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Segundo número",
                 ),
-                ElevatedButton(
-                  onPressed: () => soma(context),
-                  child:Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.add),
-                    Text("Somar"),
-                  ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => calcular(context, '+'),
+                    child: Text("Somar"),
                   ),
-                ),
-              ],
-            ),
+                  ElevatedButton(
+                    onPressed: () => calcular(context, '-'),
+                    child: Text("Subtrair"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => calcular(context, '*'),
+                    child: Text("Multiplicar"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => calcular(context, '/'),
+                    child: Text("Dividir"),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
-  void soma(BuildContext context) {
+
+  void calcular(BuildContext context, String operacao) {
     final num1 = double.parse(num1Controller.text);
     final num2 = double.parse(num2Controller.text);
+    double resultado = 0;
 
+    switch (operacao) {
+      case '+':
+        resultado = num1 + num2;
+        break;
+      case '-':
+        resultado = num1 - num2;
+        break;
+      case '*':
+        resultado = num1 * num2;
+        break;
+      case '/':
+        resultado = num1 / num2;
+        break;
+    }
+
+    final message = resultado == double.infinity ? "Não é possível realizar esse cálculo" : "$num1 $operacao $num2 = $resultado";
+    
     final snackBar = SnackBar(
-      content: Text("$num1 + $num2 = ${num1 + num2}")
+      content: Text(message),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -65,8 +92,7 @@ final num2Controller = TextEditingController();
 }
 
 class Aplicacao extends StatelessWidget {
-  const Aplicacao({super.key});
-
+  const Aplicacao({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
